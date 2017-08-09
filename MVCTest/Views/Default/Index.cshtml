@@ -1,0 +1,56 @@
+﻿@using MVCTest.Models
+@model MVCTest.Models.Employee
+
+@{
+    ViewBag.Title = "Index";
+
+    List<Employee> lstEmployee = new List<Employee>();
+    lstEmployee = Employee.GetEmployee();
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm("SetEmployee", "Default", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.ID)
+    <label for="Name">Name</label>
+    @Html.TextBoxFor(m => m.Name)
+
+    <label>Department</label>
+    @Html.DropDownListFor(m => m.DeptID, Department.GetDepartment())
+
+    <label>Status</label>
+    @Html.CheckBoxFor(m => m.Status)
+
+    <input type="submit" value="Submit" />
+
+    <br />
+    <br />
+    <table>
+        <thead>
+            <tr>
+                <th>Serial No.</th>
+                <th>Name</th>
+                <th>DeptID</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (Employee employee in lstEmployee)
+                {
+                    <tr>
+                        <td>@employee.ID</td>
+                        <td>@employee.Name</td>
+                        <td>@Department.GetDepartment().FirstOrDefault(x => x.Value == employee.DeptID.ToString()).Text </td>
+                        <td>@employee.Status</td>
+                        <td>
+                            <a href="/Default/Index?id=@employee.ID">Edit</a> &nbsp;&nbsp;                            
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+                }
